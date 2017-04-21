@@ -9,6 +9,14 @@ module.exports = {
 				var queueName = 'dump';
 
 				ch.assertQueue(queueName, {durable: false});
+
+				// Client IP 가져옴
+        			var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        			//(IPv6 to IPv4 format)
+        			ip = ip.split(':');
+				req.body.device_info.ip = ip[ip.length-1];
+				//console.log(req.body);
+
 				ch.sendToQueue(queueName, new Buffer(JSON.stringify(req.body)));
 				console.log("enqueue dump!");
 				res.writeHead(200, {'Content-Type': 'application/json'});
