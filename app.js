@@ -3,6 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var compression = require('compression');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
@@ -20,6 +21,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json({limit:"50mb"}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+// compress all requests 
+app.use(compression())
 app.use(express.static(path.join(__dirname, 'public')));
 
 
