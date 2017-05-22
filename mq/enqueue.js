@@ -8,7 +8,7 @@ module.exports = {
 			conn.createChannel(function(err,ch) {
 				var queueName = 'dump';
 
-				ch.assertQueue(queueName, {durable: false});
+				ch.assertQueue(queueName, {durable: false, autoDelete:false});
 
 				// Client IP 가져옴
         			var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -18,7 +18,9 @@ module.exports = {
 				//console.log(req.body);
 
 				ch.sendToQueue(queueName, new Buffer(JSON.stringify(req.body)));
-				console.log("enqueue dump!");
+				//console.log("enqueue dump from " + ip[ip.length-1]);
+                //console.log(req.body);
+
 				res.writeHead(200, {'Content-Type': 'application/json'});
 				res.end('{"msg": "complete"}');
 			});
